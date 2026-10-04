@@ -1,0 +1,58 @@
+{
+  "entities": {
+    "MonthlyPlan": {
+      "title": "MonthlyPlan",
+      "description": "Plano de manutenção industrial mensal contendo equipamentos, atividades e marcações de dias.",
+      "type": "object",
+      "properties": {
+        "year": {
+          "type": "number",
+          "description": "Ano do plano de manutenção (ex: 2026)"
+        },
+        "month": {
+          "type": "number",
+          "description": "Mês do plano (0 a 11)"
+        },
+        "equipments": {
+          "type": "array",
+          "description": "Lista de equipamentos industriais, atividades e dias"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp ISO da última alteração"
+        }
+      },
+      "required": ["year", "month", "equipments"]
+    },
+    "DailyPlan": {
+      "title": "DailyPlan",
+      "description": "Plano de atividade do dia com equipamentos, descrição, origem, técnicos, tempo previsto, previsão de término, status e comentários.",
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "description": "Data no formato YYYY-MM-DD"
+        },
+        "activities": {
+          "type": "array",
+          "description": "Lista de atividades diárias programadas para o dia"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp ISO da última alteração"
+        }
+      },
+      "required": ["date", "activities"]
+    }
+  },
+  "firestore": {
+    "/monthly_plans/{planId}": {
+      "schema": "MonthlyPlan",
+      "description": "Coleção com os planos mensais sincronizados na nuvem."
+    },
+    "/daily_plans/{dayId}": {
+      "schema": "DailyPlan",
+      "description": "Plano de atividades diárias indexadas pela data (ex: 2026-10-02)."
+    }
+  }
+}

@@ -1,0 +1,44 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Default Deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidMonthlyPlan(data) {
+      return data.keys().hasAll(['year', 'month', 'equipments']) &&
+             data.year is number &&
+             data.month is number &&
+             data.month >= 0 &&
+             data.month <= 11 &&
+             data.equipments is list &&
+             data.equipments.size() <= 300;
+    }
+
+    function isValidDailyPlan(data) {
+      return data.keys().hasAll(['date', 'activities']) &&
+             data.date is string &&
+             data.date.size() <= 20 &&
+             data.activities is list &&
+             data.activities.size() <= 200;
+    }
+
+    match /monthly_plans/{planId} {
+      allow read: if isValidId(planId);
+      allow create, update: if isValidId(planId) && isValidMonthlyPlan(request.resource.data);
+      allow delete: if isValidId(planId);
+    }
+
+    match /daily_plans/{dayId} {
+      allow read: if isValidId(dayId);
+      allow create, update: if isValidId(dayId) && isValidDailyPlan(request.resource.data);
+      allow delete: if isValidId(dayId);
+    }
+  }
+}

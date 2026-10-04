@@ -1,0 +1,6 @@
+{
+  "name": "Plano de Manutenção Industrial",
+  "description": "Planilha interativa de plano de manutenção com abas mensais, grade de dias, edição rápida e persistência no localStorage.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
